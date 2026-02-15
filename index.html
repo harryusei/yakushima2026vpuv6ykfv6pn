@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>屋久島縦走しおり 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap");
+      body {
+        font-family: "Noto Sans JP", sans-serif;
+        background-color: #f8fafc;
+      }
+      .tab-active {
+        border-bottom: 3px solid #059669;
+        color: #059669;
+      }
+      .timeline-line::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 1.25rem;
+        width: 2px;
+        background-color: #e2e8f0;
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const App = () => {
+        const [activeTab, setActiveTab] = useState("schedule");
+        const [activeDay, setActiveDay] = useState(0);
+        const [transportOption, setTransportOption] = useState("taxi"); // 'taxi' or 'bus'
+        const [checkedItems, setCheckedItems] = useState({});
+
+        const toggleItem = (id) => {
+          setCheckedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+        };
+
+        const itinerary = [
+          {
+            day: "Day 1",
+            date: "4/3 (金)",
+            title: "到着・準備・合流",
+            theme: "bg-emerald-50 text-emerald-900",
+            accent: "bg-emerald-500",
+            events: [
+              {
+                time: "11:10",
+                label: "空港着",
+                desc: "先行組(3名)着",
+                icon: "plane",
+              },
+              {
+                time: "11:30",
+                label: "カーシェア開始",
+                desc: "ミドルクラス車両借受（12:00～）",
+                icon: "car",
+              },
+              {
+                time: "13:00",
+                label: "買い出し",
+                desc: "安房エリア：ガス缶、2日分の食料、水",
+                icon: "shopping-cart",
+              },
+              {
+                time: "14:10",
+                label: "空港合流",
+                desc: "後発組(2名)と合流。全員集合",
+                icon: "users",
+              },
+              {
+                time: "16:00",
+                label: "宿チェックイン",
+                desc: "民宿 前岳荘（安房）。翌日のパッキング",
+                icon: "home",
+              },
+              {
+                time: "19:00",
+                label: "就寝",
+                desc: "翌朝3時半起床のため早めの休息",
+                icon: "moon",
+              },
+            ],
+          },
+          {
+            day: "Day 2",
+            date: "4/4 (土)",
+            title: "縦走開始：宮之浦岳へ",
+            theme: "bg-blue-50 text-blue-900",
+            accent: "bg-blue-500",
+            events: [
+              {
+                time: "03:30",
+                label: "起床",
+                desc: "民宿 前岳荘を一度チェックアウト",
+                icon: "clock",
+              },
+              {
+                time: "04:15",
+                label: "車両デポ",
+                desc: "屋久杉自然館に駐車（不要荷物は車内へ）",
+                icon: "car",
+              },
+              {
+                time: "04:30",
+                label: "タクシー移動",
+                desc: "屋久杉自然館 ➡ 淀川登山口（要予約ジャンボ）",
+                icon: "map-pin",
+              },
+              {
+                time: "05:20",
+                label: "入山",
+                desc: "登山届提出。ヘッドライト装着",
+                icon: "mountain",
+              },
+              {
+                time: "10:30",
+                label: "宮之浦岳",
+                desc: "九州最高峰（1,936m）登頂！",
+                icon: "flag",
+              },
+              {
+                time: "15:30",
+                label: "山小屋着",
+                desc: "新高塚小屋（避難小屋）にて宿泊",
+                icon: "tent",
+              },
+            ],
+          },
+          {
+            day: "Day 3",
+            date: "4/5 (日)",
+            title: "縄文杉と下山・温泉",
+            theme: "bg-orange-50 text-orange-900",
+            accent: "bg-orange-500",
+            events: [
+              {
+                time: "05:30",
+                label: "出発",
+                desc: "新高塚小屋発。早朝の縄文杉へ",
+                icon: "sun",
+              },
+              {
+                time: "06:30",
+                label: "縄文杉",
+                desc: "静寂の中の巨木を堪能",
+                icon: "camera",
+              },
+              {
+                time: "12:00",
+                label: "下山完了",
+                desc: "荒川登山口着",
+                icon: "check-circle",
+              },
+              {
+                time: "12:30",
+                label: "タクシー回収",
+                desc: "予約タクシーで屋久杉自然館へ（推奨）",
+                icon: "car",
+              },
+              {
+                time: "14:00",
+                label: "車両回収・温泉",
+                desc: "車に荷物を積み、尾之間温泉へ",
+                icon: "bath",
+              },
+              {
+                time: "16:00",
+                label: "再チェックイン",
+                desc: "民宿 前岳荘。縦走の打ち上げ",
+                icon: "utensils",
+              },
+            ],
+          },
+          {
+            day: "Day 4",
+            date: "4/6 (月)",
+            title: "島内観光・帰路",
+            theme: "bg-amber-50 text-amber-900",
+            accent: "bg-amber-500",
+            events: [
+              {
+                time: "09:00",
+                label: "出発",
+                desc: "宿チェックアウト。島内半周観光",
+                icon: "car",
+              },
+              {
+                time: "10:15",
+                label: "大川の滝",
+                desc: "日本の滝100選、落差88mの迫力",
+                icon: "camera",
+              },
+              {
+                time: "11:00",
+                label: "西部林道",
+                desc: "野生のシカ・サルと遭遇ドライブ",
+                icon: "compass",
+              },
+              {
+                time: "13:00",
+                label: "昼食",
+                desc: "宮之浦エリア。お土産購入",
+                icon: "shopping-bag",
+              },
+              {
+                time: "15:00",
+                label: "返却",
+                desc: "空港にてカーシェア返却手続き",
+                icon: "key",
+              },
+              {
+                time: "16:35",
+                label: "フライト",
+                desc: "屋久島空港より出発",
+                icon: "send",
+              },
+            ],
+          },
+        ];
+
+        const packingList = {
+          clothes: [
+            { id: "c1", name: "レインウェア上下", important: true },
+            { id: "c2", name: "フリース", important: true },
+            { id: "c3", name: "ウルトラライトダウン", important: true },
+            { id: "c4", name: "トレッキンググローブ", important: true },
+            { id: "c5", name: "帽子", important: false },
+            { id: "c6", name: "メリノウール靴下（宿泊用）", important: false },
+            { id: "c7", name: "フリースパンツ（休憩用）", important: false },
+            {
+              id: "c8",
+              name: "ベースレイヤー（速乾性）",
+              important: true,
+              suggested: true,
+            },
+          ],
+          gear: [
+            { id: "g1", name: "登山靴", important: true, suggested: true },
+            { id: "g2", name: "ヘッドライト", important: true },
+            { id: "g3", name: "テント & グランドシート", important: true },
+            { id: "g4", name: "寝袋（シュラフ）", important: true },
+            {
+              id: "g5",
+              name: "マット（寝袋の下用）",
+              important: true,
+              suggested: true,
+            },
+            {
+              id: "g6",
+              name: "バーナー & クッカー",
+              important: true,
+              suggested: true,
+            },
+            { id: "g7", name: "浄水器", important: false },
+            { id: "g8", name: "ゲイター", important: false },
+            { id: "g9", name: "携帯トイレ & ポンチョ", important: true },
+            {
+              id: "g10",
+              name: "GPSアプリ(YAMAP等) & 地図",
+              important: true,
+              suggested: true,
+            },
+            {
+              id: "g11",
+              name: "モバイルバッテリー",
+              important: true,
+              suggested: true,
+            },
+            { id: "g12", name: "エマージェンシーキット", important: true },
+            { id: "g13", name: "折り畳み傘", important: false },
+          ],
+          food: [
+            {
+              id: "f1",
+              name: "食事（2日目昼・夜 / 3日目朝・昼）",
+              important: true,
+            },
+            { id: "f2", name: "行動食（ゼリー、ナッツ等）", important: true },
+            { id: "f3", name: "インスタントコーヒー", important: false },
+            {
+              id: "f4",
+              name: "水（最低2L以上携行）",
+              important: true,
+              suggested: true,
+            },
+          ],
+          misc: [
+            { id: "m1", name: "トイレットペーパー", important: true },
+            { id: "m2", name: "耳栓（避難小屋用）", important: false },
+            { id: "m3", name: "現金（多めに）", important: true },
+            { id: "m4", name: "ゴミ袋", important: true, suggested: true },
+            {
+              id: "m5",
+              name: "サンダル（下山後・宿用）",
+              important: false,
+              suggested: true,
+            },
+          ],
+        };
+
+        const budget = {
+          car: 18700 + 3960 + 3000,
+          taxiD2: 15000,
+          transportD3: transportOption === "taxi" ? 15000 : 10000,
+          accommodation: 7700 * 2 * 5,
+          total: 0, // Will calculate
+        };
+        budget.total =
+          budget.car +
+          budget.taxiD2 +
+          budget.transportD3 +
+          budget.accommodation;
+        const perPerson = Math.round(budget.total / 5);
+
+        useEffect(() => {
+          if (window.lucide) window.lucide.createIcons();
+        }, [activeTab, activeDay]);
+
+        return (
+          <div className="max-w-md mx-auto min-h-screen pb-20 relative">
+            {/* Header */}
+            <header className="bg-emerald-800 text-white p-6 rounded-b-3xl shadow-lg mb-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h1 className="text-2xl font-black">YAKUSHIMA 2025</h1>
+                  <p className="text-emerald-100 text-xs mt-1 font-medium">
+                    屋久島縦走・観光 4日間
+                  </p>
+                </div>
+                <div className="bg-emerald-700 p-2 rounded-xl text-[10px] font-bold text-center">
+                  <div className="text-emerald-300">EST. BUDGET</div>
+                  <div className="text-base">¥{perPerson.toLocaleString()}</div>
+                </div>
+              </div>
+            </header>
+
+            {/* Navigation Tabs */}
+            <div className="flex bg-white mx-4 rounded-xl shadow-sm mb-6 sticky top-4 z-50 border border-slate-100">
+              <button
+                onClick={() => setActiveTab("schedule")}
+                className={`flex-1 py-3 text-sm font-bold flex flex-col items-center gap-1 ${activeTab === "schedule" ? "text-emerald-600" : "text-slate-400"}`}
+              >
+                <i data-lucide="calendar" className="w-4 h-4"></i> 行程表
+              </button>
+              <button
+                onClick={() => setActiveTab("packing")}
+                className={`flex-1 py-3 text-sm font-bold flex flex-col items-center gap-1 ${activeTab === "packing" ? "text-emerald-600" : "text-slate-400"}`}
+              >
+                <i data-lucide="package" className="w-4 h-4"></i> 持ち物
+              </button>
+              <button
+                onClick={() => setActiveTab("budget")}
+                className={`flex-1 py-3 text-sm font-bold flex flex-col items-center gap-1 ${activeTab === "budget" ? "text-emerald-600" : "text-slate-400"}`}
+              >
+                <i data-lucide="wallet" className="w-4 h-4"></i> 予算・計画
+              </button>
+            </div>
+
+            {/* Schedule View */}
+            {activeTab === "schedule" && (
+              <div className="px-4">
+                <div className="flex gap-1 mb-4">
+                  {itinerary.map((d, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveDay(i)}
+                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${activeDay === i ? "bg-emerald-600 text-white shadow-md" : "bg-white text-slate-400 border border-slate-100"}`}
+                    >
+                      {d.day}
+                    </button>
+                  ))}
+                </div>
+                <div
+                  className={`rounded-2xl p-6 shadow-sm border border-slate-100 mb-6 ${itinerary[activeDay].theme}`}
+                >
+                  <h2 className="text-lg font-black mb-6 flex items-center gap-2">
+                    <span
+                      className={`w-6 h-6 rounded-full ${itinerary[activeDay].accent} text-white flex items-center justify-center text-[10px]`}
+                    >
+                      {activeDay + 1}
+                    </span>
+                    {itinerary[activeDay].title}
+                  </h2>
+                  <div className="relative space-y-8 timeline-line">
+                    {itinerary[activeDay].events.map((e, idx) => (
+                      <div
+                        key={idx}
+                        className="relative flex items-start gap-4"
+                      >
+                        <div className="bg-white p-2 rounded-full border border-slate-200 z-10 shadow-sm">
+                          <i
+                            data-lucide={e.icon}
+                            className="w-4 h-4 text-slate-600"
+                          ></i>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-black text-sm">{e.time}</span>
+                            <span className="font-bold text-sm">{e.label}</span>
+                          </div>
+                          <p className="text-xs opacity-80 mt-1">{e.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Packing View */}
+            {activeTab === "packing" && (
+              <div className="px-4 space-y-6">
+                {Object.entries(packingList).map(([category, items]) => (
+                  <div
+                    key={category}
+                    className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                  >
+                    <h3 className="text-sm font-black mb-4 flex items-center gap-2 text-slate-600 border-b border-slate-50 pb-2">
+                      <i
+                        data-lucide={
+                          category === "clothes"
+                            ? "shirt"
+                            : category === "gear"
+                              ? "mountain"
+                              : category === "food"
+                                ? "apple"
+                                : "more-horizontal"
+                        }
+                        className="w-4 h-4"
+                      ></i>
+                      {category === "clothes"
+                        ? "衣類"
+                        : category === "gear"
+                          ? "登山装備"
+                          : category === "food"
+                            ? "食料・飲料"
+                            : "その他"}
+                    </h3>
+                    <div className="space-y-3">
+                      {items.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => toggleItem(item.id)}
+                          className="flex items-center gap-3 cursor-pointer group"
+                        >
+                          <div
+                            className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${checkedItems[item.id] ? "bg-emerald-500 border-emerald-500" : "border-slate-300"}`}
+                          >
+                            {checkedItems[item.id] && (
+                              <i
+                                data-lucide="check"
+                                className="w-3 h-3 text-white"
+                              ></i>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <span
+                              className={`text-sm ${checkedItems[item.id] ? "line-through text-slate-300" : "text-slate-700 font-medium"}`}
+                            >
+                              {item.name}
+                            </span>
+                            {item.suggested && !checkedItems[item.id] && (
+                              <span className="ml-2 text-[10px] bg-blue-50 text-blue-500 px-1.5 py-0.5 rounded-full font-bold">
+                                推奨
+                              </span>
+                            )}
+                            {item.important && !checkedItems[item.id] && (
+                              <span className="ml-1 text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded-full font-bold">
+                                重要
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Budget View */}
+            {activeTab === "budget" && (
+              <div className="px-4 space-y-6">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-sm font-black mb-6 text-slate-500 uppercase flex items-center gap-2 border-b border-slate-50 pb-3">
+                    <i data-lucide="calculator" className="w-4 h-4"></i>{" "}
+                    コストシミュレーション
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500 font-medium">
+                        カーシェア (3日間+延長)
+                      </span>
+                      <span className="font-bold font-mono">
+                        ¥{budget.car.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500 font-medium">
+                        2日目ジャンボタクシー
+                      </span>
+                      <span className="font-bold font-mono">
+                        ¥{budget.taxiD2.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-slate-500 font-medium">
+                          3日目下山手段
+                        </span>
+                        <span className="font-bold font-mono">
+                          ¥{budget.transportD3.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex p-1 bg-slate-100 rounded-lg">
+                        <button
+                          onClick={() => setTransportOption("taxi")}
+                          className={`flex-1 py-1.5 text-[10px] font-black rounded-md transition-all ${transportOption === "taxi" ? "bg-white text-emerald-600 shadow-sm" : "text-slate-400"}`}
+                        >
+                          タクシー予約
+                        </button>
+                        <button
+                          onClick={() => setTransportOption("bus")}
+                          className={`flex-1 py-1.5 text-[10px] font-black rounded-md transition-all ${transportOption === "bus" ? "bg-white text-emerald-600 shadow-sm" : "text-slate-400"}`}
+                        >
+                          バス+協力金
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500 font-medium">
+                        宿泊費 (5名×2泊)
+                      </span>
+                      <span className="font-bold font-mono">
+                        ¥{budget.accommodation.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="pt-6 border-t-2 border-dashed border-slate-100">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs font-black text-slate-400">
+                          TOTAL (5人分)
+                        </span>
+                        <span className="text-lg font-black text-slate-800 font-mono">
+                          ¥{budget.total.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-black text-emerald-600">
+                          1人あたり
+                        </span>
+                        <span className="text-2xl font-black text-emerald-600 font-mono">
+                          ¥{perPerson.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+                  <h3 className="text-xs font-black text-emerald-700 mb-3 uppercase flex items-center gap-2">
+                    <i data-lucide="info" className="w-3.5 h-3.5"></i>{" "}
+                    車両デポ戦略のおさらい
+                  </h3>
+                  <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">
+                    2日目早朝に全員で車で
+                    <span className="font-black underline">屋久杉自然館</span>
+                    へ。そこに車を置いて予約したジャンボタクシーで淀川登山口へ向かいます。3日目下山時、バスかタクシーで自然館に戻れば、目の前に自分たちの車（と着替え）がある、という作戦です。
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <footer className="mt-12 mb-8 text-center">
+              <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">
+                Safe Hiking in Yakushima
+              </p>
+            </footer>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
