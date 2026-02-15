@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>屋久島縦走しおり 2025</title>
+    <title>屋久島縦走しおり 2026</title>
+    <meta name="robots" content="noindex" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -334,7 +335,7 @@
             <header className="bg-emerald-800 text-white p-6 rounded-b-3xl shadow-lg mb-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-2xl font-black">YAKUSHIMA 2025</h1>
+                  <h1 className="text-2xl font-black">YAKUSHIMA 2026</h1>
                   <p className="text-emerald-100 text-xs mt-1 font-medium">
                     屋久島縦走・観光 4日間
                   </p>
@@ -376,22 +377,26 @@
                     <button
                       key={i}
                       onClick={() => setActiveDay(i)}
-                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${activeDay === i ? "bg-emerald-600 text-white shadow-md" : "bg-white text-slate-400 border border-slate-100"}`}
+                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex flex-col items-center justify-center gap-0.5 ${activeDay === i ? "bg-emerald-600 text-white shadow-md" : "bg-white text-slate-400 border border-slate-100"}`}
                     >
-                      {d.day}
+                      <span>{d.day}</span>
+                      <span className="text-[10px] font-normal opacity-90">{d.date}</span>
                     </button>
                   ))}
                 </div>
                 <div
                   className={`rounded-2xl p-6 shadow-sm border border-slate-100 mb-6 ${itinerary[activeDay].theme}`}
                 >
-                  <h2 className="text-lg font-black mb-6 flex items-center gap-2">
+                  <h2 className="text-lg font-black mb-6 flex items-start gap-2">
                     <span
-                      className={`w-6 h-6 rounded-full ${itinerary[activeDay].accent} text-white flex items-center justify-center text-[10px]`}
+                      className={`w-6 h-6 rounded-full ${itinerary[activeDay].accent} text-white flex-shrink-0 flex items-center justify-center text-[10px] mt-1`}
                     >
                       {activeDay + 1}
                     </span>
-                    {itinerary[activeDay].title}
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold opacity-60">{itinerary[activeDay].date}</span>
+                      <span>{itinerary[activeDay].title}</span>
+                    </div>
                   </h2>
                   <div className="relative space-y-8 timeline-line">
                     {itinerary[activeDay].events.map((e, idx) => (
