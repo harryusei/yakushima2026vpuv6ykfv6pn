@@ -233,93 +233,59 @@
 
         const packingList = {
           clothes: [
-            { id: "c1", name: "レインウェア上下", important: true },
-            { id: "c2", name: "フリース", important: true },
-            { id: "c3", name: "ウルトラライトダウン", important: true },
-            { id: "c4", name: "トレッキンググローブ", important: true },
-            { id: "c5", name: "帽子", important: false },
-            { id: "c6", name: "メリノウール靴下（宿泊用）", important: false },
-            { id: "c7", name: "フリースパンツ（休憩用）", important: false },
-            {
-              id: "c8",
-              name: "ベースレイヤー（速乾性）",
-              important: true,
-              suggested: true,
-            },
+            { id: "c1", name: "レインウェア上下", required: true },
+            { id: "c2", name: "ミドルレイヤー（フリース等）", required: true },
+            { id: "c3", name: "ベースレイヤー（速乾性）", required: true },
+            { id: "c4", name: "帽子", required: true },
+            { id: "c5", name: "防寒着上（主に休憩時・ULダウン等）", required: true },
+            { id: "c6", name: "防寒着下（休憩時・フリースパンツ等）", required: false },
+            { id: "c7", name: "替えの靴下（小屋用）", required: true },
+            { id: "c8", name: "トレッキンググローブ", required: false },
+            { id: "c9", name: "タオル",required: true },
           ],
           gear: [
-            { id: "g1", name: "登山靴", important: true, suggested: true },
-            { id: "g2", name: "ヘッドライト", important: true },
-            { id: "g3", name: "テント & グランドシート", important: true },
-            { id: "g4", name: "寝袋（シュラフ）", important: true },
-            {
-              id: "g5",
-              name: "マット（寝袋の下用）",
-              important: true,
-              suggested: true,
-            },
-            {
-              id: "g6",
-              name: "バーナー & クッカー",
-              important: true,
-              suggested: true,
-            },
-            { id: "g7", name: "浄水器", important: false },
-            { id: "g8", name: "ゲイター", important: false },
-            { id: "g9", name: "携帯トイレ & ポンチョ", important: true },
-            {
-              id: "g10",
-              name: "GPSアプリ(YAMAP等) & 地図",
-              important: true,
-              suggested: true,
-            },
-            {
-              id: "g11",
-              name: "モバイルバッテリー",
-              important: true,
-              suggested: true,
-            },
-            { id: "g12", name: "エマージェンシーキット", important: true },
-            { id: "g13", name: "折り畳み傘", important: false },
+            { id: "g0", name: "ザック（全部入るやつ。40L前後？）", required: true },
+            { id: "g1", name: "登山靴", required: true },
+            { id: "g2", name: "ヘッドライト", required: true },
+            { id: "g3", name: "テント & グランドシート", required: true },
+            { id: "g4", name: "寝袋（シュラフ）", required: true },
+            { id: "g5", name: "マット（寝袋の下用）", required: true },
+            { id: "g6", name: "バーナー & クッカー", required: false },
+            { id: "g7", name: "浄水器", required: false },
+            { id: "g8", name: "ゲイター", required: false },
+            { id: "g9", name: "携帯トイレ", required: true },
+            { id: "g10", name: "GPSアプリ(YAMAP等)", required: true },
+            { id: "g11", name: "モバイルバッテリー", required: true },
+            { id: "g12", name: "エマージェンシーキット", required: true },
+            { id: "g13", name: "折り畳み傘", required: false },
+            { id: "g14", name: "トレッキングポール", required: false },
+            { id: "g15", name: "スマートウォッチ", required: false },
           ],
           food: [
-            {
-              id: "f1",
-              name: "食事（2日目昼・夜 / 3日目朝・昼）",
-              important: true,
-            },
-            { id: "f2", name: "行動食（ゼリー、ナッツ等）", important: true },
-            { id: "f3", name: "インスタントコーヒー", important: false },
-            {
-              id: "f4",
-              name: "水（最低2L以上携行）",
-              important: true,
-              suggested: true,
-            },
+            { id: "f1", name: "食事（2日目昼・夜 / 3日目朝・昼）", required: true },
+            { id: "f2", name: "飲料水（2L程度）", required: true },
+            { id: "f3", name: "行動食（ゼリー、ナッツ等）", required: true },
+            { id: "f4", name: "嗜好品（つまみ、コーヒー等）", required: false },
           ],
           misc: [
-            { id: "m1", name: "トイレットペーパー", important: true },
-            { id: "m2", name: "耳栓（避難小屋用）", important: false },
-            { id: "m3", name: "現金（多めに）", important: true },
-            { id: "m4", name: "ゴミ袋", important: true, suggested: true },
-            {
-              id: "m5",
-              name: "サンダル（下山後・宿用）",
-              important: false,
-              suggested: true,
-            },
+            { id: "m1", name: "トイレットペーパー（芯抜き）", required: true },
+            { id: "m2", name: "現金（多めに）", required: true },
+            { id: "m3", name: "耳栓（避難小屋用）", required: true },
+            { id: "m4", name: "ゴミ袋", required: true },
           ],
         };
 
         const budget = {
-          car: 18700 + 3960 + 3000,
+          carBase: 18700,
+          carExtension: 3960,
+          carDistance: 3000,
           taxiD2: 15000,
           transportD3: transportOption === "taxi" ? 15000 : 10000,
           accommodation: 7700 * 2 * 5,
           total: 0, // Will calculate
         };
         budget.total =
-          budget.car +
+          (budget.carBase + budget.carExtension + budget.carDistance) +
           budget.taxiD2 +
           budget.transportD3 +
           budget.accommodation;
@@ -476,14 +442,9 @@
                             >
                               {item.name}
                             </span>
-                            {item.suggested && !checkedItems[item.id] && (
-                              <span className="ml-2 text-[10px] bg-blue-50 text-blue-500 px-1.5 py-0.5 rounded-full font-bold">
-                                推奨
-                              </span>
-                            )}
-                            {item.important && !checkedItems[item.id] && (
-                              <span className="ml-1 text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded-full font-bold">
-                                重要
+                          {item.required && !checkedItems[item.id] && (
+                            <span className="ml-2 text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded-full font-bold">
+                              必須
                               </span>
                             )}
                           </div>
@@ -504,13 +465,29 @@
                     コストシミュレーション
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-500 font-medium">
-                        カーシェア (3日間+延長)
-                      </span>
-                      <span className="font-bold font-mono">
-                        ¥{budget.car.toLocaleString()}
-                      </span>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-slate-500 font-bold">
+                          カーシェア合計
+                        </span>
+                        <span className="font-bold font-mono">
+                          ¥{(budget.carBase + budget.carExtension + budget.carDistance).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="pl-3 border-l-2 border-slate-100 ml-1 space-y-1">
+                        <div className="flex justify-between items-center text-xs text-slate-400">
+                          <span>ミドルクラス 72時間パック</span>
+                          <span className="font-mono">¥{budget.carBase.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs text-slate-400">
+                          <span>延長料金 (3時間)</span>
+                          <span className="font-mono">¥{budget.carExtension.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs text-slate-400">
+                          <span>距離料金 (150km)</span>
+                          <span className="font-mono">¥{budget.carDistance.toLocaleString()}</span>
+                        </div>
+                      </div>
                     </div>
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-slate-500 font-medium">
